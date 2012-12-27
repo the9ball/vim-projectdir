@@ -13,6 +13,38 @@ function! s:compareLength( a, b )
 	return strlen( a:b ) - strlen( a:a )
 endfunction
 
+" プロジェクトディレクトリの検索
+function! s:searchProjectDir( Directory )
+	for l:inst in s:directoryList
+		if 0 <= stridx( a:Directory, l:inst )
+			return l:inst
+		endif
+	endfor
+	return ''
+endfunction
+
+" ディレクトリの移動
+function! s:moveProjectDir()
+	if !exists( 'b:projectDir' )
+		" まだ検索していない。.
+		let l:nowDir = expand("%:p:h")
+		let l:result = s:searchProjectDir( nowDir )
+		if !empty( l:result )
+			let b:projectDir = l:result
+		else
+			let b:projectDir = getcwd()
+		endif
+	endif
+	"echo 'move:' . b:projectDir
+	execute 'cd ' . b:projectDir
+endfunction
+
+" バッファ移動時に動作
+augroup plugin-projectdir
+	autocmd!
+	autocmd BufReadPost,BufWritePost,BufEnter * call s:moveProjectDir()
+augroup END
+
 " プロジェクトディレクトリリストの初期化
 function! projectdir#reload()
 	" 設定ファイルを読み込む
@@ -26,32 +58,12 @@ function! projectdir#reload()
 	" 文字長でソート == 一番下位ディレクトリ優先
 	let s:directoryList = sort( s:directoryList, 's:compareLength' )
 	"echo s:directoryList
+
+	" 今いるバッファのディレクトリ更新.
+	if exists( 'b:projectDir' )
+		unlet b:projectDir
+	endif
+	call s:moveProjectDir()
 endfunction
 call projectdir#reload() " とりあえず読み込む
-
-" プロジェクトディレクトリの検索
-function! s:searchProjectDir( Directory )
-	for l:inst in s:directoryList
-		if 0 <= stridx( a:Directory, l:inst )
-			return l:inst
-		endif
-	endfor
-	return ''
-endfunction
-
-" ディレクトリの移動
-function! s:moveProjectDir()
-	let l:nowDir = expand("%:p:h")
-	let l:result = s:searchProjectDir( nowDir )
-	if !empty( l:result )
-		"echo 'move to:' . l:result
-		execute 'cd ' . l:result
-	endif
-endfunction
-
-" バッファ移動時に動作
-augroup plugin-projectdir
-	autocmd!
-	autocmd BufReadPost,BufWritePost,BufEnter * call s:moveProjectDir()
-augroup END
 
