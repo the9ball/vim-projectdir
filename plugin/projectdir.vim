@@ -93,3 +93,21 @@ function! projectdir#reload()
 endfunction
 call projectdir#reload() " とりあえず読み込む
 
+" 現在のカレントディレクトリを設定に追加する
+function! projectdir#addcwd()
+	" 設定ファイルを読み込む
+	let l:filename = fnamemodify( expand( g:filename_projectdir_file ), ':p' )
+	if !filereadable( l:filename )
+		echo 'filereadable( "' . l:filename . '" ) == false'
+		return
+	endif
+	let s:directoryList = filereadable( l:filename ) ? readfile( l:filename ) : []
+	call add( s:directoryList, getcwd() )
+	if !filewritable( l:filename )
+		echo 'filewritable( "' . l:filename . '" ) == false'
+		return
+	endif
+	call writefile( s:directoryList, l:filename )
+	call projectdir#reload()
+endfunction
+
