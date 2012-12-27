@@ -51,13 +51,21 @@ function! projectdir#reload()
 	let l:filename = fnamemodify( expand( g:filename_projectdir_file ), ':p' )
 	let s:directoryList = filereadable( l:filename ) ? readfile( l:filename ) : []
 
+	" 設定を精査
+	let l:temp = []
+	for l:inst in s:directoryList " コメントや空行を省く
+		if '' != l:inst && '#' != l:inst[0]
+			call add( l:temp, l:inst )
+		endif
+	endfor
+	let s:directoryList = copy( l:temp )
+	unlet l:temp
 	for l:i in range( len( s:directoryList ) )
 		let s:directoryList[ l:i ] = expand( s:directoryList[ l:i ] )
 	endfor
 
 	" 文字長でソート == 一番下位ディレクトリ優先
 	let s:directoryList = sort( s:directoryList, 's:compareLength' )
-	"echo s:directoryList
 
 	" 今いるバッファのディレクトリ更新.
 	if exists( 'b:projectDir' )
