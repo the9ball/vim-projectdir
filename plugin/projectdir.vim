@@ -3,10 +3,14 @@ if exists( 'g:loaded_vim_projectdir' )
 endif
 let g:loaded_vim_projectdir = 1
 
+" 初期書き込みファイル
 let s:initialize = [
 	\ '# vim-projectdir settingfile',
 	\ '$HOME/.vim',
 	\ ]
+
+" Windows判定用
+let s:is_win = has("win16") || has("win32") || has("win64")
 
 " 未定義なら初期化
 if !exists( 'g:filename_projectdir_file' ) || empty( g:filename_projectdir_file )
@@ -33,6 +37,9 @@ function! s:moveProjectDir()
 	if !exists( 'b:projectDir' )
 		" まだ検索していない。.
 		let l:nowDir = expand("%:p:h")
+		if s:is_win
+			let l:nowDir = tolower( l:nowDir )
+		endif
 		let l:result = s:searchProjectDir( nowDir )
 		if !empty( l:result )
 			let b:projectDir = l:result
@@ -70,6 +77,9 @@ function! projectdir#reload()
 	unlet l:temp
 	for l:i in range( len( s:directoryList ) )
 		let s:directoryList[ l:i ] = expand( s:directoryList[ l:i ] )
+		if s:is_win
+			let s:directoryList[ l:i ] = tolower( s:directoryList[ l:i ] )
+		endif
 	endfor
 
 	" 文字長でソート == 一番下位ディレクトリ優先
