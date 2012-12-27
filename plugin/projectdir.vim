@@ -3,6 +3,11 @@ if exists( 'g:loaded_vim_projectdir' )
 endif
 let g:loaded_vim_projectdir = 1
 
+let s:initialize = [
+	\ '# vim-projectdir settingfile',
+	\ '$HOME/.vim',
+	\ ]
+
 " 未定義なら初期化
 if !exists( 'g:filename_projectdir_file' ) || empty( g:filename_projectdir_file )
 	let g:filename_projectdir_file = expand( '$HOME/.vim/projectdir.conf' )
@@ -49,6 +54,9 @@ augroup END
 function! projectdir#reload()
 	" 設定ファイルを読み込む
 	let l:filename = fnamemodify( expand( g:filename_projectdir_file ), ':p' )
+	if !filereadable( l:filename )
+		call writefile( s:initialize, l:filename )
+	endif
 	let s:directoryList = filereadable( l:filename ) ? readfile( l:filename ) : []
 
 	" 設定を精査
