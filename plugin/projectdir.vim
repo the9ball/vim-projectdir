@@ -32,6 +32,10 @@ function! s:searchProjectDir( Directory )
 	return ''
 endfunction
 
+function! s:setProjectDir( dir )
+	let b:projectDir = substitute( a:dir, ' ', '\\ ', '' )
+endfunction
+
 " ディレクトリの移動
 function! s:moveProjectDir()
 	if !exists( 'b:projectDir' )
@@ -42,13 +46,13 @@ function! s:moveProjectDir()
 		endif
 		let l:result = s:searchProjectDir( nowDir )
 		if !empty( l:result )
-			let b:projectDir = l:result
+			call s:setProjectDir( l:result )
 		else
-			let b:projectDir = getcwd()
+			call s:setProjectDir( getcwd() )
 		endif
 	endif
 	"echo 'move:' . b:projectDir
-	execute 'lcd "' . b:projectDir . '"'
+	execute 'lcd ' . b:projectDir
 endfunction
 
 " バッファ移動時に動作
