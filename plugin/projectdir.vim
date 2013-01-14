@@ -36,6 +36,11 @@ function! s:setProjectDir( dir )
 	let b:projectDir = substitute( a:dir, ' ', '\\ ', '' )
 endfunction
 
+" 現在のディレクトリを b:projectDir に設定
+function! s:setProjectDirPwd()
+	call s:setProjectDir( getcwd() )
+endfunction
+
 " ディレクトリの移動
 function! s:moveProjectDir()
 	if !exists( 'b:projectDir' )
@@ -48,7 +53,7 @@ function! s:moveProjectDir()
 		if !empty( l:result )
 			call s:setProjectDir( l:result )
 		else
-			call s:setProjectDir( getcwd() )
+			call s:setProjectDirPwd()
 		endif
 	endif
 	"echo 'move:' . b:projectDir
@@ -59,6 +64,7 @@ endfunction
 augroup plugin-projectdir
 	autocmd!
 	autocmd BufReadPost,BufWritePost,BufEnter * call s:moveProjectDir()
+	autocmd BufLeave * call s:setProjectDirPwd()
 augroup END
 
 " プロジェクトディレクトリリストの初期化
