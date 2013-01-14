@@ -25,6 +25,9 @@ projectdir#reload()                                      *projectdir#reload()*
 projectdir#addcwd()                                      *projectdir#addcwd()*
     現在のカレントディレクトリを設定に追加します。
 
+projectdir#showlist()                                  *projectdir#showlist()*
+    ディレクトリリストを表示します。
+
 ------------------------------------------------------------------------------
 VARIABLES                                           *vim-projectdir-variables*
 

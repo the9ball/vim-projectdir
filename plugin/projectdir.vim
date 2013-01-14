@@ -121,3 +121,8 @@ function! projectdir#addcwd()
 	call projectdir#reload()
 endfunction
 
+function! projectdir#showlist()
+	for l:inst in s:directoryList
+		echo l:inst
+	endfor
+endfunction
