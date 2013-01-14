@@ -48,7 +48,7 @@ function! s:moveProjectDir()
 		endif
 	endif
 	"echo 'move:' . b:projectDir
-	execute 'cd "' . b:projectDir . '"'
+	execute 'lcd "' . b:projectDir . '"'
 endfunction
 
 " バッファ移動時に動作
