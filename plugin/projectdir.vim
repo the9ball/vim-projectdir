@@ -121,8 +121,15 @@ function! projectdir#addcwd()
 	call projectdir#reload()
 endfunction
 
+" 設定のリストを表示する
 function! projectdir#showlist()
 	for l:inst in s:directoryList
 		echo l:inst
 	endfor
 endfunction
+
+" CtrlP対応
+function! projectdir#init_ctrlp()
+	cal ctrlp#init( ctrlp#projectdir#id() )
+endfunction
+
