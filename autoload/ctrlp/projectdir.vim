@@ -13,6 +13,8 @@ let s:mark_var = {
 \  'sort':   0,
 \}
 
+let s:editconf = "-edit-"
+
 if exists('g:ctrlp_ext_vars') && !empty(g:ctrlp_ext_vars)
 	let g:ctrlp_ext_vars = add(g:ctrlp_ext_vars, s:mark_var)
 else
@@ -29,12 +31,18 @@ function! ctrlp#projectdir#init()
 	call projectdir#showlist()
 	redir END
 	let s:list = split(l:list, "\n")
+	call add( s:list, s:editconf )
 	return s:list
 endfunc
 
 function! ctrlp#projectdir#accept(mode, str)
 	call ctrlp#exit()
-	execute 'lcd ' . a:str
+
+	if s:editconf == a:str
+		execute 'edit ' . g:filename_projectdir_file
+	else
+		execute 'lcd ' . a:str
+	endif
 endfunction
 
 function! ctrlp#projectdir#exit()
