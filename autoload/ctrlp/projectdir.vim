@@ -1,5 +1,5 @@
 if exists('g:loaded_ctrlp_projectdir') && g:loaded_ctrlp_projectdir
-  "finish
+	finish
 endif
 let g:loaded_ctrlp_projectdir = 1
 
@@ -14,27 +14,27 @@ let s:mark_var = {
 \}
 
 if exists('g:ctrlp_ext_vars') && !empty(g:ctrlp_ext_vars)
-  let g:ctrlp_ext_vars = add(g:ctrlp_ext_vars, s:mark_var)
+	let g:ctrlp_ext_vars = add(g:ctrlp_ext_vars, s:mark_var)
 else
-  let g:ctrlp_ext_vars = [s:mark_var]
+	let g:ctrlp_ext_vars = [s:mark_var]
 endif
 
 if exists( 's:list' )
-  unlet s:list
+	unlet s:list
 endif
 let s:list = []
 function! ctrlp#projectdir#init()
-  let l:list = ''
-  redir => l:list
-  call projectdir#showlist()
-  redir END
-  let s:list = split(l:list, "\n")
-  return s:list
+	let l:list = ''
+	redir => l:list
+	call projectdir#showlist()
+	redir END
+	let s:list = split(l:list, "\n")
+	return s:list
 endfunc
 
 function! ctrlp#projectdir#accept(mode, str)
-  call ctrlp#exit()
-  execute 'lcd ' . a:str
+	call ctrlp#exit()
+	execute 'lcd ' . a:str
 endfunction
 
 function! ctrlp#projectdir#exit()
@@ -42,6 +42,6 @@ endfunction
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
 function! ctrlp#projectdir#id()
-  return s:id
+	return s:id
 endfunction
 
