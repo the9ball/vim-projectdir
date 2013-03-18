@@ -40,6 +40,7 @@ function! ctrlp#projectdir#accept(mode, str)
 
 	if s:editconf == a:str
 		execute 'edit ' . g:filename_projectdir_file
+		autocmd BufWritePost,FileWritePost <buffer> call projectdir#reload()
 	else
 		execute 'lcd ' . a:str
 	endif
