@@ -22,6 +22,18 @@ function! s:compareLength( a, b )
 	return strlen( a:b ) - strlen( a:a )
 endfunction
 
+" 重複チェック
+function! s:unique_array( a )
+	for l:index in range( 0, len( a:a )-2 )
+		if 0 <= index( a:a, a:a[l:index], l:index+1 )
+			" TODO:もっといい感じに
+			call remove( a:a, l:index )
+			return s:unique_array( a:a )
+		endif
+	endfor
+	return a:a
+endfunction
+
 " プロジェクトディレクトリの検索
 function! s:searchProjectDir( Directory )
 	for l:inst in s:directoryList
@@ -112,12 +124,17 @@ function! projectdir#addcwd()
 		return
 	endif
 	let s:directoryList = filereadable( l:filename ) ? readfile( l:filename ) : []
-	call add( s:directoryList, getcwd() )
+
+	call add( s:directoryList, getcwd() ) " カレントを追加
+	let s:directoryList = s:unique_array( s:directoryList ) " 重複チェック
+
+	" 書き込む
 	if !filewritable( l:filename )
 		echo 'filewritable( "' . l:filename . '" ) == false'
 		return
 	endif
 	call writefile( s:directoryList, l:filename )
+
 	call projectdir#reload()
 endfunction
 
