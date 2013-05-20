@@ -128,8 +128,21 @@ function! projectdir#showlist()
 	endfor
 endfunction
 
-" CtrlP対応
-function! projectdir#init_ctrlp()
-	cal ctrlp#init( ctrlp#projectdir#id() )
+" tyruさんから
+function! s:has_plugin(name)
+    let nosuffix = a:name =~? '\.vim$' ? a:name[:-5] : a:name
+    let suffix   = a:name =~? '\.vim$' ? a:name      : a:name . '.vim'
+    return &rtp =~# '\c\<' . nosuffix . '\>'
+    \   || globpath(&rtp, suffix, 1) != ''
+    \   || globpath(&rtp, nosuffix, 1) != ''
+    \   || globpath(&rtp, 'autoload/' . suffix, 1) != ''
+    \   || globpath(&rtp, 'autoload/' . tolower(suffix), 1) != ''
 endfunction
+
+" CtrlP対応
+if g:has_plugin( 'CtrlP' )
+	function! projectdir#init_ctrlp()
+		cal ctrlp#init( ctrlp#projectdir#id() )
+	endfunction
+endif
 
