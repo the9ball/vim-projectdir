@@ -45,7 +45,7 @@ function! s:searchProjectDir( Directory )
 endfunction
 
 function! s:setProjectDir( dir )
-	let b:projectDir = substitute( a:dir, ' ', '\\ ', '' )
+	let b:projectDir = substitute( a:dir, ' ', '\\ ', 'g' )
 endfunction
 
 " 現在のディレクトリを b:projectDir に設定
