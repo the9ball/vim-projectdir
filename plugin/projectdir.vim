@@ -157,7 +157,7 @@ function! s:has_plugin(name)
 endfunction
 
 " CtrlP対応
-if g:has_plugin( 'CtrlP' )
+if s:has_plugin( 'CtrlP' )
 	function! projectdir#init_ctrlp()
 		cal ctrlp#init( ctrlp#projectdir#id() )
 	endfunction
